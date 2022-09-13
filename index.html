@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Reachability Matrix</title>
+
+		<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+		<!--<script src="data.js"></script>
+		<script src="Graph.js"></script>-->
+		<script src="functions.js"></script>
+		<script src="data.js"></script>
+		<script src="ReachabilityMatrix.js"></script>
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="stylesheet.css">
+	</head>
+	<body>
+		<div class="container-fluid h-100 d-flex flex-column">
+			<div class="row min-vh-100">
+				<div class="col-3" id="content">
+					<div class="d-flex flex-column h-100 mh-100" style="color: white">
+						<div class="row">
+							<div class="col-md-12">
+								<h1>Demonstrate Graph</h1>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<h2>Show graph segments</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-9">
+								<select id="select_segment">
+									<option value="">(none)</option>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<button onclick="show_segment()">show</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-9">
+								<label for="show_segment">Now showing segment rooted at: </label>
+							</div>
+							<div class="col-md-3">
+								<p id="show_segment"></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<h2>Show domain</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-9">
+								<select id="select_domain">
+									<option value="">(none)</option>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<button onclick="show_domain()">show</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<label for="show_domainNode">Node ID</label>
+							</div>
+							<div class="col-md-3">
+								<p id="show_domainNode"></p>
+							</div>
+							<div class="col-md-3">
+								<label for="show_domainHead">Head ID</label>
+							</div>
+							<div class="col-md-3">
+								<p id="show_domainHead"></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<h2>Remove edge</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<label for="edge_del_sourceID">Source:</label>
+							</div>
+							<div class="col-md-3">
+								<select id="edge_del_sourceID">
+									<option value="">(none)</option>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label for="edge_del_sourceIntf">Intf</label>
+							</div>
+							<div class="col-md-3">
+								<select id="edge_del_sourceIntf">
+									<option value="">(none)</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<label for="edge_del_targetID">Target:</label>
+							</div>
+							<div class="col-md-3">
+								<select id="edge_del_targetID">
+									<option value="">(none)</option>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label for="edge_del_targetIntf">Intf</label>
+							</div>
+							<div class="col-md-3">
+								<select id="edge_del_targetIntf">
+									<option value="">(none)</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<button onclick="edge_del()">remove selected edge</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<h2>Add edge</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<label for="edge_add_sourceID">Source:</label>
+							</div>
+							<div class="col-md-3">
+								<select id="edge_add_sourceID" >
+									<option value="">(none)</option>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label for="edge_add_sourceIntf">Intf</label>
+							</div>
+							<div class="col-md-3">
+								<select id="edge_add_sourceIntf">
+									<option value="">(none)</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<label for="edge_add_targetID">Target:</label>
+							</div>
+							<div class="col-md-3">
+								<select id="edge_add_targetID">
+									<option value="">(none)</option>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label for="edge_add_targetIntf">Intf</label>
+							</div>
+							<div class="col-md-3">
+								<select id="edge_add_targetIntf">
+									<option value="">(none)</option>
+									<option value="0">0</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<button onclick="edge_add()">add selected edge</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<h2>Tables Contents</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<select id="table_type" onchange="set_table()">
+									<option value="0">(none)</option>
+									<option value="1">Intra-Links (West/East)</option>
+									<option value="2">Inter-Level Children (South)</option>
+									<option value="3">Inter-Level Parents (North)</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="container_table" id="container_table">
+									<table id="display_table" class="table">
+										<thead class="thead-light">
+											<tr>
+												<th scope="col">level</th>
+												<th scope="col">source</th>
+												<th scope="col">port</th>
+												<th scope="col">target</th>
+												<th scope="col">port</th>
+												<th scope="col">active</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr></tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-9">
+					<div id="cy"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		document.getElementById('container_table').style.height = (window.innerHeight / 4) + 'px'
+		cy = cytoscape({
+			container: document.getElementById('cy'),
+			elements: [],
+			style: [
+				{
+					selector: 'node',
+					style: {
+						'label': 'data(id)',
+						'text-valign': 'data(valign)',
+						'text-halign': 'data(halign)',
+						'background-color': 'data(color)',
+						'opacity': 0.85
+					}
+				},
+				{
+					selector: 'edge',
+					style: {
+						//'label': 'data(id)',
+						'line-style': 'data(is_up)',
+						'opacity': 0.85,
+						'curve-style': 'bezier',
+						'target-arrow-shape': 'data(target_arrow)',
+						'source-text-offset': 50,
+						'target-text-offset': 50,
+						'source-label': 'data(source_intf)',
+						'target-label': 'data(target_intf)'
+					}
+				},
+				{
+					selector: 'node:selected',
+					style: {
+						'background-color': 'data(invert)'
+					}
+				}
+			]
+		})
+		document.getElementById('content').style.maxHeight = window.innerHeight + 'px'
+		var reachability_matrix = new ReachabilityMatrix(edges, 'A')
+		//add_options(select_id, items)
+		add_options('edge_del_sourceID', reachability_matrix.get_nodes())
+		add_options('edge_add_sourceID', reachability_matrix.get_nodes())
+		add_options('edge_del_targetID', reachability_matrix.get_nodes())
+		add_options('edge_add_targetID', reachability_matrix.get_nodes())
+		add_options('select_domain', reachability_matrix.get_nodes())
+		add_options('select_segment', reachability_matrix.get_nodes())
+		show_graph()
+		console.log('levels')
+		console.log(reachability_matrix.levels)
+		console.log('inter-level children')
+		console.log(reachability_matrix.links_child)
+		console.log('inter-level parents')
+		console.log(reachability_matrix.links_parent)
+		console.log('intra-level links')
+		console.log(reachability_matrix.links_intra)
+		console.log('fabric domains')
+		console.log(reachability_matrix.domains)
+		console.log('root')
+		console.log(reachability_matrix.root)
+		console.log('recorded connections')
+		console.log(reachability_matrix.graph)
+	</script>
+</html>
